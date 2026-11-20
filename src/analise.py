@@ -11,6 +11,9 @@ Testes
   Tamanho do efeito: correlação rank-biserial pareada (−1 a 1).
 - ANOVA (statsmodels, tipo II): log(tempo) ~ compilação × threads + versão + bloco, uma por carga.
   Tamanho do efeito: η² parcial.
+- ANOVA EXPLORATÓRIA (acrescentada depois do piloto, ver bench/DESENHO.md): o mesmo modelo com a interação
+  tripla compilação × threads × versão. Pergunta: o ganho com threads sem GIL muda de uma versão para outra?
+  O modelo planejado não responde isso, porque trata a versão só como efeito principal.
 - Correção de Holm sobre a família inteira de testes.
 - IC 95% por bootstrap (reamostrando benchmarks) para as médias geométricas de razões de tempo.
 """
@@ -169,20 +172,30 @@ def analisar_q3(mt: pd.DataFrame, testes: list) -> tuple[pd.DataFrame, pd.DataFr
           .agg(speedup=gmean, n_blocos="count").reset_index())
 
     linhas = []
+    nomes = {"C(compilacao)": "compilação", "C(threads)": "threads", "C(compilacao):C(threads)": "compilação × threads",
+             "C(compilacao):C(threads):C(versao)": "compilação × threads × versão (exploratória)"}
     for carga, d in mt.groupby("carga"):
         d = d.assign(log_t=np.log(d["tempo_s"]))
-        formula = "log_t ~ C(compilacao) * C(threads) + C(versao)" + (" + C(bloco)" if d["bloco"].nunique() > 1 else "")
-        tab = anova_lm(smf.ols(formula, data=d).fit(), typ=2)
-        ss_res = tab.loc["Residual", "sum_sq"]
-        for efeito in ("C(compilacao)", "C(threads)", "C(compilacao):C(threads)"):
-            linha = tab.loc[efeito]
-            eta = linha["sum_sq"] / (linha["sum_sq"] + ss_res)
-            linhas.append({"carga": carga, "efeito": efeito.replace("C(", "").replace(")", ""),
-                           "F": linha["F"], "p": linha["PR(>F)"], "eta2_parcial": eta})
-            if efeito == "C(compilacao):C(threads)":
-                testes.append({"questao": "Q3", "teste": f"ANOVA, interação compilação × threads: {carga}",
-                               "n": len(d), "W": linha["F"], "p": linha["PR(>F)"], "rb": np.nan,
-                               "eta2_parcial": eta})
+        bloco = " + C(bloco)" if d["bloco"].nunique() > 1 else ""
+        modelos = [("log_t ~ C(compilacao) * C(threads) + C(versao)" + bloco,
+                    ("C(compilacao)", "C(threads)", "C(compilacao):C(threads)"))]
+        if d["versao"].nunique() > 1:
+            modelos.append(("log_t ~ C(compilacao) * C(threads) * C(versao)" + bloco,
+                            ("C(compilacao):C(threads):C(versao)",)))
+        for formula, efeitos in modelos:
+            tab = anova_lm(smf.ols(formula, data=d).fit(), typ=2)
+            ss_res = tab.loc["Residual", "sum_sq"]
+            for efeito in efeitos:
+                linha = tab.loc[efeito]
+                eta = linha["sum_sq"] / (linha["sum_sq"] + ss_res)
+                linhas.append({"carga": carga, "efeito": nomes[efeito],
+                               "F": linha["F"], "p": linha["PR(>F)"], "eta2_parcial": eta})
+                if efeito != "C(compilacao)" and efeito != "C(threads)":
+                    rotulo = ("ANOVA, interação compilação × threads" if efeito == "C(compilacao):C(threads)"
+                              else "ANOVA exploratória, interação compilação × threads × versão")
+                    testes.append({"questao": "Q3", "teste": f"{rotulo}: {carga}",
+                                   "n": len(d), "W": linha["F"], "p": linha["PR(>F)"], "rb": np.nan,
+                                   "eta2_parcial": eta})
     return q3, pd.DataFrame(linhas)
 
 

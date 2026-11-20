@@ -99,12 +99,14 @@ def sec_q3(r: analise.Resultado) -> str:
     d = r.q3[r.q3["threads"] == tmax].pivot_table(index=["carga", "versao"], columns="compilacao", values="speedup")
     linhas = [[graficos.NOME_CARGA.get(c, c), v, num(row.get("padrao"), 2) + "×", num(row.get("free-threaded"), 2) + "×"]
               for (c, v), row in d.iterrows()]
-    anova = [[graficos.NOME_CARGA.get(x["carga"], x["carga"]), x["efeito"].replace(":", " × "), num(x["F"], 1),
+    anova = [[graficos.NOME_CARGA.get(x["carga"], x["carga"]), x["efeito"], num(x["F"], 1),
               pval(x["p"]), num(x["eta2_parcial"], 3)] for _, x in r.q3_anova.iterrows()]
     return (f"![G3](images/{img})\n\n"
             + f"Speedup com {tmax} threads, relativo à compilação padrão com 1 thread da mesma versão:\n\n"
             + tabela(linhas, ["Carga", "Versão", "Padrão (com GIL)", "Free-threaded (sem GIL)"])
-            + "\n\nANOVA fatorial sobre log(tempo), uma por carga (modelo: compilação × threads + versão + bloco):\n\n"
+            + "\n\nANOVA fatorial sobre log(tempo), uma por carga (modelo planejado: compilação × threads + versão + bloco). "
+            + "A última linha de cada carga vem de um segundo modelo, **exploratório**, com a interação tripla "
+            + "compilação × threads × versão: ela testa se o ganho com threads sem GIL muda entre as versões.\n\n"
             + tabela(anova, ["Carga", "Efeito", "F", "p", "η² parcial"]))
 
 

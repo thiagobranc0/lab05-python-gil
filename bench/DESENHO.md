@@ -76,6 +76,9 @@ bloco, em paralelo.
    ([`src/validar.py`](../src/validar.py)), gera o README ([`build.py`](../build.py)), grava tudo em `data/`
    e, no modo completo, cria a tag `dataset-<execução>`. Se a validação falhar, abre uma issue com o relatório.
 
+Um segundo workflow, [`readme.yml`](../.github/workflows/readme.yml), regenera o README sem coletar de novo
+sempre que muda o texto (`docs/README.base.md`) ou a análise; usa a última execução válida em `data/`.
+
 ## Registro de mudanças
 
 | Data | Mudança | Motivo |
@@ -83,3 +86,5 @@ bloco, em paralelo.
 | 20/11/2026 | Desenho inicial | – |
 | 20/11/2026 | `json` passa a usar uma cópia por thread; nova carga `json_compartilhado`; topologia da CPU registrada | o piloto mostrou a 3.15t sem ganho nenhum com threads no `json`; teste local confirmou que a causa é a disputa pelo objeto compartilhado (3.15.2t: 0,63 → 0,45 → 0,71 s com 1/2/4 threads; com cópia por thread: 0,62 → 0,32 → 0,17 s; a 3.14.10t escala nos dois casos). A carga original misturava vazão do JSON com disputa pelo objeto; agora são duas cargas. A topologia explica o escalonamento abaixo do ideal de 2 para 4 threads |
 | 20/11/2026 | uv fixado em 0.13.9 | o teste local com um uv antigo instalou a 3.15.0a5 (alfa); fixar o uv torna as versões reprodutíveis |
+| 20/11/2026 | Coleta completa `20261120-2001_completo_44807518024`: 10 blocos, validação ok | – |
+| 20/11/2026 | ANOVA **exploratória** com a interação tripla compilação × threads × versão, ao lado do modelo planejado (que fica igual) | a coleta completa confirmou que, no `json_compartilhado`, só a 3.15t não escala; o modelo planejado trata a versão só como efeito principal e não consegue mostrar isso. Como foi decidida **depois** de ver os dados, é apresentada como exploratória, não como confirmatória |
