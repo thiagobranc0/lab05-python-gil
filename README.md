@@ -128,22 +128,26 @@ Speedup com 4 threads, relativo à compilação padrão com 1 thread da mesma ve
 | JSON (objeto compartilhado) | 3.14 | 0,98× | 1,90× |
 | JSON (objeto compartilhado) | 3.15 | 0,97× | 0,96× |
 
-ANOVA fatorial sobre log(tempo), uma por carga (modelo: compilação × threads + versão + bloco):
+ANOVA fatorial sobre log(tempo), uma por carga (modelo planejado: compilação × threads + versão + bloco). A última linha de cada carga vem de um segundo modelo, **exploratório**, com a interação tripla compilação × threads × versão: ela testa se o ganho com threads sem GIL muda entre as versões.
 
 | Carga | Efeito | F | p | η² parcial |
 |---|---|---|---|---|
-| CPU em Python puro | compilacao | 42.023,0 | < 0,001 | 0,959 |
+| CPU em Python puro | compilação | 42.023,0 | < 0,001 | 0,959 |
 | CPU em Python puro | threads | 18.161,8 | < 0,001 | 0,953 |
-| CPU em Python puro | compilacao × threads | 19.803,2 | < 0,001 | 0,957 |
-| hashlib (controle) | compilacao | 0,6 | 0,448 | 0,000 |
+| CPU em Python puro | compilação × threads | 19.803,2 | < 0,001 | 0,957 |
+| CPU em Python puro | compilação × threads × versão (exploratória) | 9,2 | < 0,001 | 0,020 |
+| hashlib (controle) | compilação | 0,6 | 0,448 | 0,000 |
 | hashlib (controle) | threads | 187.230,0 | < 0,001 | 0,995 |
-| hashlib (controle) | compilacao × threads | 1,0 | 0,355 | 0,001 |
-| JSON (cópia por thread) | compilacao | 111.071,3 | < 0,001 | 0,984 |
+| hashlib (controle) | compilação × threads | 1,0 | 0,355 | 0,001 |
+| hashlib (controle) | compilação × threads × versão (exploratória) | 0,1 | 0,993 | 0,000 |
+| JSON (cópia por thread) | compilação | 111.071,3 | < 0,001 | 0,984 |
 | JSON (cópia por thread) | threads | 45.197,8 | < 0,001 | 0,981 |
-| JSON (cópia por thread) | compilacao × threads | 51.320,8 | < 0,001 | 0,983 |
-| JSON (objeto compartilhado) | compilacao | 1.171,1 | < 0,001 | 0,396 |
+| JSON (cópia por thread) | compilação × threads | 51.320,8 | < 0,001 | 0,983 |
+| JSON (cópia por thread) | compilação × threads × versão (exploratória) | 8,4 | < 0,001 | 0,019 |
+| JSON (objeto compartilhado) | compilação | 1.171,1 | < 0,001 | 0,396 |
 | JSON (objeto compartilhado) | threads | 609,6 | < 0,001 | 0,406 |
-| JSON (objeto compartilhado) | compilacao × threads | 740,2 | < 0,001 | 0,454 |
+| JSON (objeto compartilhado) | compilação × threads | 740,2 | < 0,001 | 0,454 |
+| JSON (objeto compartilhado) | compilação × threads × versão (exploratória) | 2.472,5 | < 0,001 | 0,848 |
 
 ### Q4 · Memória
 
@@ -167,15 +171,19 @@ ANOVA fatorial sobre log(tempo), uma por carga (modelo: compilação × threads 
 | Q | Teste | n | Estatística | p | p (Holm) | Tamanho do efeito |
 |---|---|---|---|---|---|---|
 | Q1 | Wilcoxon pareado: tempo 3.14 × 3.13 (padrão) | 22 | W = 1,0 | < 0,001 | < 0,001 | rank-biserial = -0,99 |
-| Q1 | Wilcoxon pareado: tempo 3.15 × 3.14 (padrão) | 22 | W = 31,0 | 0,001 | 0,002 | rank-biserial = -0,75 |
+| Q1 | Wilcoxon pareado: tempo 3.15 × 3.14 (padrão) | 22 | W = 31,0 | 0,001 | 0,003 | rank-biserial = -0,75 |
 | Q1 | Wilcoxon pareado: tempo 3.15 × 3.13 (padrão) | 22 | W = 0,0 | < 0,001 | < 0,001 | rank-biserial = -1,00 |
 | Q2 | Wilcoxon pareado: tempo 3.13t × 3.13 (1 thread) | 22 | W = 1,0 | < 0,001 | < 0,001 | rank-biserial = 0,99 |
 | Q2 | Wilcoxon pareado: tempo 3.14t × 3.14 (1 thread) | 22 | W = 14,0 | < 0,001 | < 0,001 | rank-biserial = 0,89 |
 | Q2 | Wilcoxon pareado: tempo 3.15t × 3.15 (1 thread) | 22 | W = 3,0 | < 0,001 | < 0,001 | rank-biserial = 0,98 |
 | Q3 | ANOVA, interação compilação × threads: cpu_puro | 1800 | F = 19.803,2 | < 0,001 | < 0,001 | η²p = 0,957 |
-| Q3 | ANOVA, interação compilação × threads: hash_controle | 1800 | F = 1,0 | 0,355 | 0,355 | η²p = 0,001 |
+| Q3 | ANOVA exploratória, interação compilação × threads × versão: cpu_puro | 1800 | F = 9,2 | < 0,001 | < 0,001 | η²p = 0,020 |
+| Q3 | ANOVA, interação compilação × threads: hash_controle | 1800 | F = 1,0 | 0,355 | 0,710 | η²p = 0,001 |
+| Q3 | ANOVA exploratória, interação compilação × threads × versão: hash_controle | 1800 | F = 0,1 | 0,993 | 0,993 | η²p = 0,000 |
 | Q3 | ANOVA, interação compilação × threads: json | 1800 | F = 51.320,8 | < 0,001 | < 0,001 | η²p = 0,983 |
+| Q3 | ANOVA exploratória, interação compilação × threads × versão: json | 1800 | F = 8,4 | < 0,001 | < 0,001 | η²p = 0,019 |
 | Q3 | ANOVA, interação compilação × threads: json_compartilhado | 1800 | F = 740,2 | < 0,001 | < 0,001 | η²p = 0,454 |
+| Q3 | ANOVA exploratória, interação compilação × threads × versão: json_compartilhado | 1800 | F = 2.472,5 | < 0,001 | < 0,001 | η²p = 0,848 |
 
 ### Estabilidade das medições
 
