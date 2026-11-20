@@ -1,0 +1,73 @@
+# Desenho experimental
+
+Toda a configuração está em [`config.py`](config.py). Mudou o desenho? Mude lá e registre aqui, com a data e o motivo.
+
+## Objeto, tratamentos e fatores
+
+| Fator | Níveis | Tipo |
+|---|---|---|
+| Versão do CPython | 3.13, 3.14, 3.15 | ordinal |
+| Compilação | padrão (com GIL) · free-threaded (sem GIL, sufixo `t`) | nominal |
+| Threads (só nas cargas com threads) | 1, 2, 4 | razão, tratada como fator |
+| Carga | 20 benchmarks do pyperformance (uma thread) · 3 cargas próprias (várias threads) | nominal |
+| **Bloco** | cada runner do GitHub Actions | fator de bloqueio |
+
+Os 6 interpretadores (3 versões × 2 compilações) são instalados com `uv python install` (builds do projeto
+python-build-standalone, os mesmos em qualquer máquina Linux x86-64). A **versão do uv é fixada**
+(`UV_VERSAO` = 0.13.9), porque é ela que define qual build existe para cada "3.x": com ela, todos os runners
+instalam **3.13.18, 3.14.10 e 3.15.2** (versões finais, conferidas em 20/11/2026). A validação recusa
+versões diferentes dessas e versões alfa/beta/rc no modo completo.
+
+## Variáveis dependentes
+
+| Métrica | Como é medida | Escala |
+|---|---|---|
+| Tempo de um benchmark (s) | pyperf: vários processos, aquecimento descartado; usamos a mediana dos valores no bloco | razão |
+| Tempo de uma carga com threads (s) | `time.perf_counter` entre a largada (barreira) e o fim de todas as threads | razão |
+| Speedup | razão de tempos (derivada) | razão |
+| Pico de memória (MiB) | `resource.getrusage(...).ru_maxrss` do processo | razão |
+
+## Cargas com várias threads ([`mt_workloads.py`](mt_workloads.py))
+
+Escala forte: o **trabalho total é fixo** e é dividido igualmente entre as threads.
+
+| Carga | O que faz | O que se espera |
+|---|---|---|
+| `cpu_puro` | conta primos por divisão, em Python puro | com GIL não escala; sem GIL deveria escalar |
+| `json` | `json.dumps` + `json.loads` de um documento médio | idem |
+| `hash_controle` | SHA-256 de buffers de 4 MiB | **controle**: o `hashlib` já libera a GIL, então escala nas duas compilações |
+
+Cada execução tem um aquecimento não medido (2 % do trabalho) e devolve um `checksum`. O mesmo trabalho
+tem de dar o mesmo checksum em todo interpretador: a validação confere isso.
+
+## Blocos, ordem e repetições
+
+- **Bloco = runner.** Cada runner mede **todos** os 6 interpretadores, então toda comparação entre
+  interpretadores é feita dentro da mesma máquina (pareada). Runners diferentes podem ter CPUs diferentes;
+  isso vira variação **entre** blocos, não viés **dentro** do bloco.
+- **Ordem sorteada** dentro do bloco, com semente `SEMENTE_BASE + nº do bloco` (reprodutível):
+  - uma thread: a ordem dos 6 interpretadores no pyperformance;
+  - várias threads: todas as combinações interpretador × carga × threads × repetição embaralhadas juntas.
+- **Repetições:** o próprio pyperf repete cada benchmark em vários processos. Nas cargas com threads,
+  `mt_reps` repetições por combinação.
+
+| Modo | pyperformance | Repetições (threads) | Para quê |
+|---|---|---|---|
+| `teste` | 3 benchmarks, 1 valor | 1 (trabalho reduzido) | conferir que o pipeline roda |
+| `piloto` | 20 benchmarks, `--fast` | 3 | calibrar e achar benchmarks que não rodam |
+| `completo` | 20 benchmarks, padrão | 10 | dataset do estudo |
+
+## Pipeline automático ([`.github/workflows/benchmark.yml`](../.github/workflows/benchmark.yml))
+
+1. `preparar`: define a lista de blocos e o identificador da execução.
+2. `bloco` (N runners em paralelo): instala os interpretadores, roda [`run_block.py`](run_block.py), publica o artifact.
+3. `consolidar`: junta os blocos ([`src/consolidar.py`](../src/consolidar.py)), **valida**
+   ([`src/validar.py`](../src/validar.py)), gera o README ([`build.py`](../build.py)), grava tudo em `data/`
+   e, no modo completo, cria a tag `dataset-<execução>`. Se a validação falhar, abre uma issue com o relatório.
+
+## Registro de mudanças
+
+| Data | Mudança | Motivo |
+|---|---|---|
+| 20/11/2026 | Desenho inicial | – |
+| 20/11/2026 | uv fixado em 0.13.9 | o teste local com um uv antigo instalou a 3.15.0a5 (alfa); fixar o uv torna as versões reprodutíveis |

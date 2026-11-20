@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+.host/
+saida/
+artefatos/
+_trabalho-*/
+venv/
+
+
+CLAUDE.md

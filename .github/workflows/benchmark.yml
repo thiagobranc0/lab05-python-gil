@@ -1,0 +1,120 @@
+# Coleta, validação, versionamento e análise 100% automáticos.
+# Disparo: aba Actions -> benchmark -> Run workflow (ou `gh workflow run benchmark.yml -f modo=piloto -f blocos=2`).
+name: benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "teste (fumaça) · piloto (calibração) · completo (dataset do estudo)"
+        type: choice
+        options: [teste, piloto, completo]
+        default: piloto
+      blocos:
+        description: "Nº de blocos = nº de runners em paralelo"
+        type: number
+        default: 2
+
+permissions:
+  contents: write  # gravar os dados e o README no repositório
+  issues: write    # abrir issue quando a validação automática falha
+
+concurrency:
+  group: benchmark
+  cancel-in-progress: false
+
+jobs:
+  preparar:
+    runs-on: ubuntu-latest
+    outputs:
+      blocos: ${{ steps.m.outputs.blocos }}
+      execucao: ${{ steps.m.outputs.execucao }}
+    steps:
+      - id: m
+        run: |
+          python3 -c "import json; print('blocos=' + json.dumps(list(range(1, ${{ inputs.blocos }} + 1))))" >> "$GITHUB_OUTPUT"
+          echo "execucao=$(date -u +%Y%m%d-%H%M)_${{ inputs.modo }}_${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+  bloco:
+    needs: preparar
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      matrix:
+        bloco: ${{ fromJSON(needs.preparar.outputs.blocos) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.9"  # igual a UV_VERSAO em bench/config.py
+      - name: Instalar os interpretadores medidos e o hospedeiro
+        run: |
+          uv python install 3.12 3.13 3.13t 3.14 3.14t 3.15 3.15t
+          uv venv .host --python 3.12
+          uv pip install --python .host -r bench/requirements.txt
+      - name: Rodar o bloco ${{ matrix.bloco }}
+        run: .host/bin/python bench/run_block.py --bloco ${{ matrix.bloco }} --modo ${{ inputs.modo }} --saida saida/bloco-${{ matrix.bloco }}
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: bloco-${{ matrix.bloco }}
+          path: saida/bloco-${{ matrix.bloco }}
+          if-no-files-found: warn
+
+  consolidar:
+    needs: [preparar, bloco]
+    if: always() && needs.preparar.result == 'success'
+    runs-on: ubuntu-latest
+    env:
+      EXECUCAO: ${{ needs.preparar.outputs.execucao }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: bloco-*
+          path: artefatos
+      - name: Consolidar
+        run: python src/consolidar.py --entrada artefatos --execucao "$EXECUCAO" --modo ${{ inputs.modo }}
+      - name: Validar automaticamente
+        id: validar
+        run: |
+          set +e
+          python src/validar.py --execucao "$EXECUCAO" --blocos-esperados ${{ inputs.blocos }}
+          echo "codigo=$?" >> "$GITHUB_OUTPUT"
+      - name: Gerar README (análise, tabelas e gráficos)
+        if: steps.validar.outputs.codigo == '0'
+        run: python build.py
+      - name: Gravar dados no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data README.md images
+          status=$([ "${{ steps.validar.outputs.codigo }}" = "0" ] && echo ok || echo falha)
+          git commit -m "dados: execução $EXECUCAO (${{ inputs.modo }}, validação $status)" || exit 0
+          for tentativa in 1 2 3; do
+            git pull --rebase && git push && break
+            sleep 5
+          done
+      - name: Versionar o dataset (tag)
+        if: steps.validar.outputs.codigo == '0' && inputs.modo == 'completo'
+        run: |
+          git tag "dataset-$EXECUCAO"
+          git push origin "dataset-$EXECUCAO"
+      - name: Abrir issue se a validação falhou
+        if: steps.validar.outputs.codigo != '0'
+        run: |
+          gh label create validacao-automatica --color B60205 --description "Aberta pelo workflow quando a validação falha" --force
+          {
+            echo "Execução: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo
+            cat "data/processed/$EXECUCAO/VALIDACAO.md"
+          } > corpo.md
+          gh issue create --title "Validação automática falhou: $EXECUCAO" --label validacao-automatica --body-file corpo.md
+          exit 1
