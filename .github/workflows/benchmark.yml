@@ -45,7 +45,7 @@ jobs:
         bloco: ${{ fromJSON(needs.preparar.outputs.blocos) }}
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.4.0  # este repositório não publica a tag curta v10
         with:
           version: "0.13.9"  # igual a UV_VERSAO em bench/config.py
       - name: Instalar os interpretadores medidos e o hospedeiro
@@ -95,7 +95,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data README.md images
+          git add data README.md
+          [ -d images ] && git add images
           status=$([ "${{ steps.validar.outputs.codigo }}" = "0" ] && echo ok || echo falha)
           git commit -m "dados: execução $EXECUCAO (${{ inputs.modo }}, validação $status)" || exit 0
           for tentativa in 1 2 3; do
@@ -108,7 +109,7 @@ jobs:
           git tag "dataset-$EXECUCAO"
           git push origin "dataset-$EXECUCAO"
       - name: Abrir issue se a validação falhou
-        if: steps.validar.outputs.codigo != '0'
+        if: always() && steps.validar.outputs.codigo != '0'
         run: |
           gh label create validacao-automatica --color B60205 --description "Aberta pelo workflow quando a validação falha" --force
           {
