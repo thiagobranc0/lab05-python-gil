@@ -1,0 +1,843 @@
+Python benchmark suite 1.14.0
+
+Creating the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/_temp/uv-python-dir/cpython-3.13+freethreaded-linux-x86_64-gnu/bin/python3.13t -m venv --without-pip /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m ensurepip -v -U
+Using pip 26.3 from /tmp/tmp6so1msq7/pip-26.3-py3-none-any.whl/pip (python 3.13)
+Looking in links: /tmp/tmp6so1msq7
+Processing /tmp/tmp6so1msq7/pip-26.3-py3-none-any.whl
+Installing collected packages: pip
+  changing mode of /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/pip3 to 755
+  changing mode of /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/pip3.13 to 755
+Successfully installed pip-26.3
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install -U 'setuptools>=18.5' wheel
+Collecting setuptools>=18.5
+  Using cached setuptools-84.2.1-py3-none-any.whl.metadata (6.6 kB)
+Collecting wheel
+  Using cached wheel-0.48.0-py3-none-any.whl.metadata (2.3 kB)
+Collecting packaging>=24.0 (from wheel)
+  Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Using cached setuptools-84.2.1-py3-none-any.whl (876 kB)
+Using cached wheel-0.48.0-py3-none-any.whl (33 kB)
+Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Installing collected packages: setuptools, packaging, wheel
+
+Successfully installed packaging-26.3 setuptools-84.2.1 wheel-0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip --version
+pip 26.3 from /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages/pip (python 3.13)
+
+==================================================
+( 1/20) creating venv for benchmark (chaos)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Collecting pyperf==2.10.0
+  Using cached pyperf-2.10.0-py3-none-any.whl.metadata (6.2 kB)
+Collecting psutil>=5.9.0 (from pyperf==2.10.0)
+  Downloading psutil-7.2.2-cp313-cp313t-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Using cached pyperf-2.10.0-py3-none-any.whl (144 kB)
+Downloading psutil-7.2.2-cp313-cp313t-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (181 kB)
+Installing collected packages: psutil, pyperf
+
+Successfully installed psutil-7.2.2 pyperf-2.10.0
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 2/20) creating venv for benchmark (comprehensions)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 3/20) creating venv for benchmark (coroutines)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 4/20) creating venv for benchmark (deepcopy)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 5/20) creating venv for benchmark (deltablue)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 6/20) creating venv for benchmark (fannkuch)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 7/20) creating venv for benchmark (float)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 8/20) creating venv for benchmark (generators)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+( 9/20) creating venv for benchmark (go)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(10/20) creating venv for benchmark (hexiom)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(11/20) creating venv for benchmark (json_dumps)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(12/20) creating venv for benchmark (json_loads)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(13/20) creating venv for benchmark (nbody)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(14/20) creating venv for benchmark (nqueens)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(15/20) creating venv for benchmark (pickle_pure_python)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(16/20) creating venv for benchmark (pidigits)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(17/20) creating venv for benchmark (raytrace)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(18/20) creating venv for benchmark (regex_compile)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(19/20) creating venv for benchmark (richards)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+==================================================
+(20/20) creating venv for benchmark (spectral_norm)
+
+(trying common venv first)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install pyperf==2.10.0
+Requirement already satisfied: pyperf==2.10.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (2.10.0)
+Requirement already satisfied: psutil>=5.9.0 in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (from pyperf==2.10.0) (7.2.2)
+Installing requirements into the virtual environment /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip install psutil
+Requirement already satisfied: psutil in ./venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/lib/python3.13t/site-packages (7.2.2)
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -m pip freeze
+packaging==26.3
+psutil==7.2.2
+pyperf==2.10.0
+setuptools==84.2.1
+wheel==0.48.0
+
+[ 1/20] chaos...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_chaos/run_benchmark.py --fast --output /tmp/tmpqnkseb21 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+chaos: Mean +- std dev: 70.3 ms +- 0.7 ms
+[ 2/20] comprehensions...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_comprehensions/run_benchmark.py --fast --output /tmp/tmpc70py2yw --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+comprehensions: Mean +- std dev: 17.0 us +- 0.2 us
+[ 3/20] coroutines...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_coroutines/run_benchmark.py --fast --output /tmp/tmpfgjf8bdw --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+coroutines: Mean +- std dev: 21.1 ms +- 0.3 ms
+[ 4/20] deepcopy...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_deepcopy/run_benchmark.py --fast --output /tmp/tmpna60btv0 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+deepcopy: Mean +- std dev: 340 us +- 4 us
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+deepcopy_reduce: Mean +- std dev: 3.21 us +- 0.05 us
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+deepcopy_memo: Mean +- std dev: 39.3 us +- 1.2 us
+[ 5/20] deltablue...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_deltablue/run_benchmark.py --fast --output /tmp/tmpd2plc8p8 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+deltablue: Mean +- std dev: 5.48 ms +- 0.10 ms
+[ 6/20] fannkuch...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_fannkuch/run_benchmark.py --fast --output /tmp/tmp62je10ua --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+fannkuch: Mean +- std dev: 349 ms +- 8 ms
+[ 7/20] float...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_float/run_benchmark.py --fast --output /tmp/tmpleqshxzg --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+float: Mean +- std dev: 116 ms +- 5 ms
+[ 8/20] generators...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_generators/run_benchmark.py --fast --output /tmp/tmpz0br3khz --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+generators: Mean +- std dev: 34.7 ms +- 2.7 ms
+[ 9/20] go...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_go/run_benchmark.py --fast --output /tmp/tmp5w47xlc7 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+go: Mean +- std dev: 188 ms +- 2 ms
+[10/20] hexiom...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_hexiom/run_benchmark.py --fast --output /tmp/tmpwv_6oqgd --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+hexiom: Mean +- std dev: 7.08 ms +- 0.13 ms
+[11/20] json_dumps...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_json_dumps/run_benchmark.py --fast --output /tmp/tmpu7u3qdgd --inherit-environ PYPERFORMANCE_RUNID
+...........
+json_dumps: Mean +- std dev: 8.03 ms +- 0.06 ms
+[12/20] json_loads...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_json_loads/run_benchmark.py --fast --output /tmp/tmpqfr9ihjn --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+json_loads: Mean +- std dev: 20.4 us +- 1.3 us
+[13/20] nbody...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_nbody/run_benchmark.py --fast --output /tmp/tmpda7i2lr1 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+nbody: Mean +- std dev: 152 ms +- 4 ms
+[14/20] nqueens...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_nqueens/run_benchmark.py --fast --output /tmp/tmpxqxpd6a1 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+nqueens: Mean +- std dev: 78.7 ms +- 1.9 ms
+[15/20] pickle_pure_python...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_pickle/run_benchmark.py --pure-python pickle --fast --output /tmp/tmpt0qjln20 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* the standard deviation (53.8 us) is 15% of the mean (369 us)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+pickle_pure_python: Mean +- std dev: 369 us +- 54 us
+[16/20] pidigits...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_pidigits/run_benchmark.py --fast --output /tmp/tmptdi_hga1 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+pidigits: Mean +- std dev: 174 ms +- 1 ms
+[17/20] raytrace...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_raytrace/run_benchmark.py --fast --output /tmp/tmpfecqgbiw --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+raytrace: Mean +- std dev: 345 ms +- 5 ms
+[18/20] regex_compile...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_regex_compile/run_benchmark.py --fast --output /tmp/tmpw0n6oja8 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+regex_compile: Mean +- std dev: 120 ms +- 1 ms
+[19/20] richards...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_richards/run_benchmark.py --fast --output /tmp/tmpk4_f2hvk --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+richards: Mean +- std dev: 48.5 ms +- 0.8 ms
+[20/20] spectral_norm...
+# /home/runner/work/lab05-python-gil/lab05-python-gil/saida/_trabalho-bloco-2/venv/cpython3.13-46b39bb9f984-compat-31b33d68c68a/bin/python -u /home/runner/work/lab05-python-gil/lab05-python-gil/.host/lib/python3.12/site-packages/pyperformance/data-files/benchmarks/bm_spectral_norm/run_benchmark.py --fast --output /tmp/tmpdp7auo07 --inherit-environ PYPERFORMANCE_RUNID
+...........
+WARNING: the benchmark result may be unstable
+* Not enough samples to get a stable result (95% certainly of less than 1% variation)
+
+Try to rerun the benchmark with more runs, values and/or loops.
+Run 'python -m pyperf system tune' command to reduce the system jitter.
+Use pyperf stats, pyperf dump and pyperf hist to analyze results.
+Use --quiet option to hide these warnings.
+
+spectral_norm: Mean +- std dev: 121 ms +- 2 ms
+
+Performance version: 1.14.0
+Python version: 3.13.18 (64-bit)
+Report on Linux-7.0.0-1019-azure-x86_64-with-glibc2.43
+Number of logical CPUs: 4
+Start date: 2026-11-20 18:05:02.378410
+End date: 2026-11-20 18:07:32.465045
+
+### chaos ###
+Mean +- std dev: 70.3 ms +- 0.7 ms
+
+### comprehensions ###
+Mean +- std dev: 17.0 us +- 0.2 us
+
+### coroutines ###
+Mean +- std dev: 21.1 ms +- 0.3 ms
+
+### deepcopy ###
+Mean +- std dev: 340 us +- 4 us
+
+### deepcopy_reduce ###
+Mean +- std dev: 3.21 us +- 0.05 us
+
+### deepcopy_memo ###
+Mean +- std dev: 39.3 us +- 1.2 us
+
+### deltablue ###
+Mean +- std dev: 5.48 ms +- 0.10 ms
+
+### fannkuch ###
+Mean +- std dev: 349 ms +- 8 ms
+
+### float ###
+Mean +- std dev: 116 ms +- 5 ms
+
+### generators ###
+Mean +- std dev: 34.7 ms +- 2.7 ms
+
+### go ###
+Mean +- std dev: 188 ms +- 2 ms
+
+### hexiom ###
+Mean +- std dev: 7.08 ms +- 0.13 ms
+
+### json_dumps ###
+Mean +- std dev: 8.03 ms +- 0.06 ms
+
+### json_loads ###
+Mean +- std dev: 20.4 us +- 1.3 us
+
+### nbody ###
+Mean +- std dev: 152 ms +- 4 ms
+
+### nqueens ###
+Mean +- std dev: 78.7 ms +- 1.9 ms
+
+### pickle_pure_python ###
+Mean +- std dev: 369 us +- 54 us
+
+### pidigits ###
+Mean +- std dev: 174 ms +- 1 ms
+
+### raytrace ###
+Mean +- std dev: 345 ms +- 5 ms
+
+### regex_compile ###
+Mean +- std dev: 120 ms +- 1 ms
+
+### richards ###
+Mean +- std dev: 48.5 ms +- 0.8 ms
+
+### spectral_norm ###
+Mean +- std dev: 121 ms +- 2 ms
+
+
+--- stderr ---

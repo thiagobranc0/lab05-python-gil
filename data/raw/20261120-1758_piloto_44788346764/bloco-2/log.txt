@@ -1,0 +1,24 @@
+[2026-11-20T17:58:47+00:00] bloco 2, modo piloto, CPU AMD EPYC 9V74 80-Core Processor (4 vCPUs)
+[2026-11-20T17:58:47+00:00] [st] 3.15: /home/runner/work/lab05-python-gil/lab05-python-gil/.host/bin/python -m pyperformance run --python /home/runner/work/_temp/uv-python-dir/cpython-3.15-linux-x86_64-gnu/bin/python3.15 -b chaos,comprehensions,coroutines,deepcopy,deltablue,fannkuch,float,generators,go,hexiom,json_dumps,json_loads,nbody,nqueens,pickle_pure_python,pidigits,raytrace,regex_compile,richards,spectral_norm -o /home/runner/work/lab05-python-gil/lab05-python-gil/saida/bloco-2/pyperf_3.15.json --fast
+[2026-11-20T18:01:33+00:00] [st] 3.15: código 0 em 166 s
+[2026-11-20T18:01:33+00:00] [st] 3.15: 22 benchmarks, 440 valores
+[2026-11-20T18:01:33+00:00] [st] 3.15t: /home/runner/work/lab05-python-gil/lab05-python-gil/.host/bin/python -m pyperformance run --python /home/runner/work/_temp/uv-python-dir/cpython-3.15+freethreaded-linux-x86_64-gnu/bin/python3.15t -b chaos,comprehensions,coroutines,deepcopy,deltablue,fannkuch,float,generators,go,hexiom,json_dumps,json_loads,nbody,nqueens,pickle_pure_python,pidigits,raytrace,regex_compile,richards,spectral_norm -o /home/runner/work/lab05-python-gil/lab05-python-gil/saida/bloco-2/pyperf_3.15t.json --fast
+[2026-11-20T18:04:32+00:00] [st] 3.15t: código 0 em 179 s
+[2026-11-20T18:04:32+00:00] [st] 3.15t: 22 benchmarks, 440 valores
+[2026-11-20T18:04:32+00:00] [st] 3.13t: /home/runner/work/lab05-python-gil/lab05-python-gil/.host/bin/python -m pyperformance run --python /home/runner/work/_temp/uv-python-dir/cpython-3.13+freethreaded-linux-x86_64-gnu/bin/python3.13t -b chaos,comprehensions,coroutines,deepcopy,deltablue,fannkuch,float,generators,go,hexiom,json_dumps,json_loads,nbody,nqueens,pickle_pure_python,pidigits,raytrace,regex_compile,richards,spectral_norm -o /home/runner/work/lab05-python-gil/lab05-python-gil/saida/bloco-2/pyperf_3.13t.json --fast
+[2026-11-20T18:07:31+00:00] [st] 3.13t: código 0 em 179 s
+[2026-11-20T18:07:31+00:00] [st] 3.13t: 22 benchmarks, 440 valores
+[2026-11-20T18:07:31+00:00] [st] 3.14: /home/runner/work/lab05-python-gil/lab05-python-gil/.host/bin/python -m pyperformance run --python /home/runner/work/_temp/uv-python-dir/cpython-3.14-linux-x86_64-gnu/bin/python3.14 -b chaos,comprehensions,coroutines,deepcopy,deltablue,fannkuch,float,generators,go,hexiom,json_dumps,json_loads,nbody,nqueens,pickle_pure_python,pidigits,raytrace,regex_compile,richards,spectral_norm -o /home/runner/work/lab05-python-gil/lab05-python-gil/saida/bloco-2/pyperf_3.14.json --fast
+[2026-11-20T18:10:14+00:00] [st] 3.14: código 0 em 163 s
+[2026-11-20T18:10:14+00:00] [st] 3.14: 22 benchmarks, 440 valores
+[2026-11-20T18:10:14+00:00] [st] 3.14t: /home/runner/work/lab05-python-gil/lab05-python-gil/.host/bin/python -m pyperformance run --python /home/runner/work/_temp/uv-python-dir/cpython-3.14+freethreaded-linux-x86_64-gnu/bin/python3.14t -b chaos,comprehensions,coroutines,deepcopy,deltablue,fannkuch,float,generators,go,hexiom,json_dumps,json_loads,nbody,nqueens,pickle_pure_python,pidigits,raytrace,regex_compile,richards,spectral_norm -o /home/runner/work/lab05-python-gil/lab05-python-gil/saida/bloco-2/pyperf_3.14t.json --fast
+[2026-11-20T18:13:06+00:00] [st] 3.14t: código 0 em 172 s
+[2026-11-20T18:13:06+00:00] [st] 3.14t: 22 benchmarks, 440 valores
+[2026-11-20T18:13:06+00:00] [st] 3.13: /home/runner/work/lab05-python-gil/lab05-python-gil/.host/bin/python -m pyperformance run --python /home/runner/work/_temp/uv-python-dir/cpython-3.13-linux-x86_64-gnu/bin/python3.13 -b chaos,comprehensions,coroutines,deepcopy,deltablue,fannkuch,float,generators,go,hexiom,json_dumps,json_loads,nbody,nqueens,pickle_pure_python,pidigits,raytrace,regex_compile,richards,spectral_norm -o /home/runner/work/lab05-python-gil/lab05-python-gil/saida/bloco-2/pyperf_3.13.json --fast
+[2026-11-20T18:15:50+00:00] [st] 3.13: código 0 em 164 s
+[2026-11-20T18:15:50+00:00] [st] 3.13: 22 benchmarks, 440 valores
+[2026-11-20T18:15:50+00:00] [mt] 162 execuções
+[2026-11-20T18:16:54+00:00] [mt] 50/162 execuções
+[2026-11-20T18:18:00+00:00] [mt] 100/162 execuções
+[2026-11-20T18:19:04+00:00] [mt] 150/162 execuções
+[2026-11-20T18:19:21+00:00] fim do bloco em 20.6 min
