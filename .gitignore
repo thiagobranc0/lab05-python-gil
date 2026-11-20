@@ -7,5 +7,6 @@ artefatos/
 _trabalho-*/
 venv/
 
-
+# documentos internos do grupo: distribuídos à mão entre os integrantes, fora do repositório
 CLAUDE.md
+plano.md
