@@ -20,7 +20,8 @@ GRADE = "#e6e5e0"
 COR_VERSAO = {"3.13": "#2a78d6", "3.14": "#eb6834", "3.15": "#1baf7a"}
 COR_COMPILACAO = {"padrao": "#52514e", "free-threaded": "#6250d6"}
 NOME_COMPILACAO = {"padrao": "padrão (com GIL)", "free-threaded": "free-threaded (sem GIL)"}
-NOME_CARGA = {"cpu_puro": "CPU em Python puro", "json": "JSON", "hash_controle": "hashlib (controle)"}
+NOME_CARGA = {"cpu_puro": "CPU em Python puro", "json": "JSON (cópia por thread)",
+              "json_compartilhado": "JSON (objeto compartilhado)", "hash_controle": "hashlib (controle)"}
 
 plt.rcParams.update({
     "figure.facecolor": SUPERFICIE, "axes.facecolor": SUPERFICIE, "savefig.facecolor": SUPERFICIE,

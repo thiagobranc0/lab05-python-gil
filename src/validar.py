@@ -77,6 +77,8 @@ def validar_ambiente(amb: pd.DataFrame, esperados: int, modo: str, r: Relatorio)
             r.aviso(f"{interp}: versões exatas diferentes entre blocos: {versoes}.")
         elif versoes:
             r.info(f"{interp}: {versoes[0]}")
+    if "threads_por_nucleo" in amb:
+        r.info(f"Threads por núcleo físico: {amb['threads_por_nucleo'].value_counts().to_dict()}")
     cpus = amb["cpu_modelo"].value_counts().to_dict()
     r.info(f"Modelos de CPU por bloco: {cpus}")
     if len(cpus) > 1:

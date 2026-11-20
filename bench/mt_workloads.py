@@ -8,6 +8,7 @@ Se as threads rodam em paralelo de verdade, o tempo cai com mais threads; com a 
 (a não ser na carga de controle, que libera a GIL sozinha).
 """
 import argparse
+import copy
 import hashlib
 import json
 import sys
@@ -17,7 +18,8 @@ import time
 # Quantidade de trabalho com escala 1.0, calibrada para ~1–2 s com 1 thread num runner do GitHub.
 TRABALHO = {
     "cpu_puro": 12_000,       # nº de blocos de 50 números testados por divisão
-    "json": 48_000,           # nº de ciclos dumps+loads
+    "json": 48_000,           # nº de ciclos dumps+loads, cada thread com a SUA cópia do documento
+    "json_compartilhado": 48_000,  # idem, todas as threads sobre o MESMO objeto
     "hash_controle": 800,     # nº de SHA-256 de 4 MiB
 }
 
@@ -42,7 +44,7 @@ def eh_primo(n: int) -> bool:
     return True
 
 
-def tarefa_cpu_puro(inicio: int, fim: int) -> int:
+def tarefa_cpu_puro(inicio: int, fim: int, _doc=None) -> int:
     total = 0
     for bloco in range(inicio, fim):
         base = 1_000_000 + bloco * 50
@@ -52,21 +54,36 @@ def tarefa_cpu_puro(inicio: int, fim: int) -> int:
     return total
 
 
-def tarefa_json(inicio: int, fim: int) -> int:
+def tarefa_json(inicio: int, fim: int, doc) -> int:
     total = 0
     for _ in range(inicio, fim):
-        total += len(json.loads(json.dumps(DOC_JSON))["itens"])
+        total += len(json.loads(json.dumps(doc))["itens"])
     return total
 
 
-def tarefa_hash(inicio: int, fim: int) -> int:
+def tarefa_hash(inicio: int, fim: int, _doc=None) -> int:
     total = 0
     for _ in range(inicio, fim):
         total += hashlib.sha256(BUFFER).digest()[0]
     return total
 
 
-TAREFAS = {"cpu_puro": tarefa_cpu_puro, "json": tarefa_json, "hash_controle": tarefa_hash}
+TAREFAS = {"cpu_puro": tarefa_cpu_puro, "json": tarefa_json, "json_compartilhado": tarefa_json,
+           "hash_controle": tarefa_hash}
+
+
+def documento_da_thread(carga: str):
+    """json: uma cópia por thread (mede a vazão em paralelo). json_compartilhado: o mesmo objeto para todas.
+
+    Sem a GIL, várias threads acessando o MESMO objeto disputam a trava daquele objeto. O piloto de 20/11
+    mostrou que a 3.15t trava o objeto durante a serialização (não escala), e a 3.14t não; por isso as duas
+    situações viraram cargas separadas.
+    """
+    if carga == "json":
+        return copy.deepcopy(DOC_JSON)
+    if carga == "json_compartilhado":
+        return DOC_JSON
+    return None
 
 
 def gil_ativa() -> bool:
@@ -87,7 +104,8 @@ def medir(carga: str, n_threads: int, escala: float) -> dict:
     total = max(n_threads, int(TRABALHO[carga] * escala))
 
     # Aquecimento (não medido): 2% do trabalho numa thread só.
-    tarefa(0, max(1, total // 50))
+    tarefa(0, max(1, total // 50), DOC_JSON)
+    docs = [documento_da_thread(carga) for _ in range(n_threads)]
 
     # Fatias iguais do trabalho total, uma por thread.
     limites = [total * i // n_threads for i in range(n_threads + 1)]
@@ -96,7 +114,7 @@ def medir(carga: str, n_threads: int, escala: float) -> dict:
 
     def trabalhador(i: int) -> None:
         largada.wait()
-        resultados[i] = tarefa(limites[i], limites[i + 1])
+        resultados[i] = tarefa(limites[i], limites[i + 1], docs[i])
 
     threads = [threading.Thread(target=trabalhador, args=(i,)) for i in range(n_threads)]
     for t in threads:

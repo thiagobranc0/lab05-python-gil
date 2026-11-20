@@ -34,7 +34,8 @@ Escala forte: o **trabalho total é fixo** e é dividido igualmente entre as thr
 | Carga | O que faz | O que se espera |
 |---|---|---|
 | `cpu_puro` | conta primos por divisão, em Python puro | com GIL não escala; sem GIL deveria escalar |
-| `json` | `json.dumps` + `json.loads` de um documento médio | idem |
+| `json` | `json.dumps` + `json.loads` de um documento médio, **cada thread com a sua cópia** | idem |
+| `json_compartilhado` | o mesmo, mas **todas as threads sobre o mesmo objeto** | mede o custo de compartilhar objetos sem a GIL (cada objeto tem a sua trava) |
 | `hash_controle` | SHA-256 de buffers de 4 MiB | **controle**: o `hashlib` já libera a GIL, então escala nas duas compilações |
 
 Cada execução tem um aquecimento não medido (2 % do trabalho) e devolve um `checksum`. O mesmo trabalho
@@ -57,6 +58,16 @@ tem de dar o mesmo checksum em todo interpretador: a validação confere isso.
 | `piloto` | 20 benchmarks, `--fast` | 3 | calibrar e achar benchmarks que não rodam |
 | `completo` | 20 benchmarks, padrão | 10 | dataset do estudo |
 
+## Tamanho da coleta completa (decidido com o piloto de 20/11)
+
+O piloto (2 blocos, `20261120-1758_piloto_44788346764`) mediu variação pequena: coeficiente de variação
+mediano de 1,5 % entre os valores do pyperf e de 0,6 % entre as repetições das cargas com threads. Os efeitos
+observados são de 10 % ou mais. Com esse ruído, poucas repetições já bastam para detectar esses efeitos, então o
+nº de blocos **não** é escolhido por poder estatístico, e sim por **generalização entre máquinas**: mais
+runners = mais chance de pegar CPUs e vizinhos diferentes. Escolha: **10 blocos**, modo `completo`
+(pyperf no modo padrão, 10 repetições por combinação nas cargas com threads). Duração estimada: ~1 h por
+bloco, em paralelo.
+
 ## Pipeline automático ([`.github/workflows/benchmark.yml`](../.github/workflows/benchmark.yml))
 
 1. `preparar`: define a lista de blocos e o identificador da execução.
@@ -70,4 +81,5 @@ tem de dar o mesmo checksum em todo interpretador: a validação confere isso.
 | Data | Mudança | Motivo |
 |---|---|---|
 | 20/11/2026 | Desenho inicial | – |
+| 20/11/2026 | `json` passa a usar uma cópia por thread; nova carga `json_compartilhado`; topologia da CPU registrada | o piloto mostrou a 3.15t sem ganho nenhum com threads no `json`; teste local confirmou que a causa é a disputa pelo objeto compartilhado (3.15.2t: 0,63 → 0,45 → 0,71 s com 1/2/4 threads; com cópia por thread: 0,62 → 0,32 → 0,17 s; a 3.14.10t escala nos dois casos). A carga original misturava vazão do JSON com disputa pelo objeto; agora são duas cargas. A topologia explica o escalonamento abaixo do ideal de 2 para 4 threads |
 | 20/11/2026 | uv fixado em 0.13.9 | o teste local com um uv antigo instalou a 3.15.0a5 (alfa); fixar o uv torna as versões reprodutíveis |

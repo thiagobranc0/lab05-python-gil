@@ -52,6 +52,10 @@ def sec_execucao(d: analise.Dados) -> str:
         ["Blocos (runners)", f"{len(amb)}"],
         ["CPUs", "; ".join(f"{m} ({n} bloco{'s' if n > 1 else ''})" for m, n in cpus.items())],
         ["vCPUs por runner", ", ".join(map(str, sorted(amb["n_cpus"].unique())))],
+        ["Núcleos físicos × threads por núcleo",
+         ", ".join(sorted({f"{int(n * s)} × {int(t)}" for n, s, t in
+                           amb[["nucleos_por_soquete", "soquetes", "threads_por_nucleo"]].dropna().itertuples(index=False)}))
+         if "threads_por_nucleo" in amb else "não registrado"],
         ["Interpretadores", "; ".join(versoes)],
         ["Início (UTC)", str(amb["inicio_utc"].min())],
         ["Duração dos blocos", f"{num(amb['duracao_min'].min(), 0)}–{num(amb['duracao_min'].max(), 0)} min"],

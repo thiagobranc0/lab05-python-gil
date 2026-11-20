@@ -73,11 +73,21 @@ def info_maquina() -> dict:
     cpuinfo = ler_arquivo("/proc/cpuinfo")
     modelo = next((l.split(":", 1)[1].strip() for l in cpuinfo.splitlines() if l.startswith("model name")),
                   platform.processor())
+    topologia = {}
+    try:  # núcleos físicos × threads por núcleo (hyperthreading muda o quanto threads podem escalar)
+        saida = subprocess.run(["lscpu"], capture_output=True, text=True, check=True).stdout
+        campos = dict(l.split(":", 1) for l in saida.splitlines() if ":" in l)
+        topologia = {"threads_por_nucleo": int(campos["Thread(s) per core"].strip()),
+                     "nucleos_por_soquete": int(campos["Core(s) per socket"].strip()),
+                     "soquetes": int(campos["Socket(s)"].strip())}
+    except (OSError, subprocess.CalledProcessError, KeyError, ValueError):
+        pass
     meminfo = ler_arquivo("/proc/meminfo")
     mem_kb = next((int(l.split()[1]) for l in meminfo.splitlines() if l.startswith("MemTotal")), None)
     return {
         "cpu_modelo": modelo,
         "n_cpus": os.cpu_count(),
+        **topologia,
         "mem_gb": round(mem_kb / 1024 / 1024, 1) if mem_kb else None,
         "sistema": platform.platform(),
         "kernel": platform.release(),

@@ -26,10 +26,12 @@ EXCLUIDOS: dict[str, str] = {}  # nome -> motivo (preenchido a partir do relató
 
 # Cargas próprias com VÁRIAS threads (Q3 e Q4), em bench/mt_workloads.py.
 #   cpu_puro       Python puro, CPU-bound: a GIL deveria impedir ganho com mais threads.
-#   json           serialização/desserialização: também segura a GIL na maior parte do tempo.
+#   json           serialização/desserialização, cada thread com sua cópia do documento.
+#   json_compartilhado  o mesmo trabalho, todas as threads sobre UM objeto: mede o custo de compartilhar
+#                  objetos sem a GIL (incluída depois do piloto de 20/11; ver bench/DESENHO.md).
 #   hash_controle  hashlib em buffers grandes: a GIL já é liberada, então ter ou não GIL NÃO
 #                  deveria mudar o resultado. É o grupo de controle das cargas com threads.
-CARGAS_MT = ["cpu_puro", "json", "hash_controle"]
+CARGAS_MT = ["cpu_puro", "json", "json_compartilhado", "hash_controle"]
 THREADS = [1, 2, 4]
 
 # Semente: a ordem dos tratamentos dentro de cada bloco é sorteada com SEMENTE_BASE + nº do bloco.
