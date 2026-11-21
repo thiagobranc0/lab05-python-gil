@@ -298,3 +298,17 @@ _A preencher (#18)._
 
 - **Coleta:** aba *Actions* → *benchmark* → *Run workflow* (modo `teste`, `piloto` ou `completo`; nº de blocos).
 - **Análise local:** `pip install -r requirements.txt && python build.py`
+
+## 10. Classificação do estudo (7 categorias da Aula 8)
+
+| Categoria | Classificação | Justificativa |
+|---|---|---|
+| Natureza | **Aplicada** | Responde a uma decisão prática (atualizar o CPython? adotar o free-threading?) com um software real, e não constrói teoria nova. |
+| Objetivos | **Explicativa** (com um componente descritivo na Q4) | Busca saber se e quanto cada fator (versão, compilação, threads) muda o desempenho, e testa hipóteses; a Q4 só descreve a magnitude. |
+| Abordagem | **Quantitativa** | Dados numéricos (tempo, speedup, RSS) analisados com estatística inferencial (Wilcoxon, ANOVA, bootstrap). |
+| Procedimentos | **Experimento controlado em laboratório** (fatorial, em blocos) | O grupo manipula os fatores, sorteia a ordem e controla as cargas; roda em runners do GitHub Actions, que fazem o papel de laboratório. Não é estudo observacional nem mineração de repositórios. |
+| Tempo | **Transversal** | A coleta se concentra em poucas horas (cerca de 1 h por bloco, em paralelo), numa única versão de patch por série; a replicação em outro horário checa se o resultado se repete, mas não acompanha a evolução no tempo. |
+| Controle | **Alto, com ressalva** | O grupo controla os tratamentos, a ordem e as cargas. Não controla o hardware compartilhado dos runners (CPUs diferentes, vizinhos barulhentos), mitigado com blocos e validação da variabilidade. |
+| Nível de evidência | **Alto para "estes runners e estas cargas"; limitado para generalizar** | Um experimento controlado, com réplicas (10 blocos) e replicação, está no alto da escala para relações de causa e efeito. A generalização para servidores reais, com mais núcleos e aplicações com extensões em C, é limitada. |
+
+_Esta é a versão 1, feita antes de revisar a execução. Será revisada depois da coleta completa (#19)._
