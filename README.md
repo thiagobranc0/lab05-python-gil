@@ -38,18 +38,90 @@ Os ganhos anunciados a cada versão e o seu confronto com a medição estão na 
 
 ## 2. Pergunta, GQM e hipóteses
 
-**Pergunta:** As versões recentes do CPython e a compilação sem GIL (free-threaded) entregam os ganhos de
+### 2.1 Pergunta de pesquisa e objetivo (template de Basili)
+
+**Pergunta principal:** As versões recentes do CPython e a compilação sem GIL (free-threaded) entregam os ganhos de
 desempenho anunciados, e a que custo para o código de uma thread só?
 
-| Questão | Métrica | H₀ | H₁ |
+**Objetivo (GQM, template de Basili):**
+
+> **Analisar** as versões 3.13, 3.14 e 3.15 do CPython, cada uma na compilação padrão (com GIL) e na free-threaded (sem GIL),
+> **com o propósito de** avaliar (comparar versões e compilações),
+> **com respeito a** desempenho (tempo de execução com uma thread e escalonamento com 1, 2 e 4 threads) e consumo de memória (pico de RSS),
+> **do ponto de vista de** quem mantém ou opera aplicações Python e decide se atualiza a versão ou adota o free-threading,
+> **no contexto de** runners do GitHub Actions (Linux x86-64, 4 vCPUs), com 20 benchmarks em Python puro do `pyperformance` 1.14.0 e 4 cargas próprias com threads.
+
+### 2.2 Questões (Q) e métricas (M) do GQM
+
+| Questão | Métricas |
+|---|---|
+| **Q1** · Cada versão nova é mais rápida que a anterior em código de uma thread? | **M1** tempo por benchmark (s, mediana do `pyperf` no bloco); **M2** speedup entre versões (razão de tempos) e sua média geométrica, com IC 95 % |
+| **Q2** · Quanto a compilação sem GIL custa em código de uma thread? | **M3** razão de tempo free-threaded ÷ padrão, na mesma versão (overhead % = razão − 1), média geométrica com IC 95 % |
+| **Q3** · Quanto a compilação sem GIL ganha em código CPU-bound com várias threads? | **M4** tempo da carga com 1, 2 e 4 threads (s); **M5** speedup com n threads (tempo com 1 thread ÷ tempo com n) e eficiência de escalonamento (speedup ÷ n) |
+| **Q4** · Quanto de memória a mais a compilação sem GIL usa? | **M6** pico de RSS do processo (MiB); razão de RSS free-threaded ÷ padrão |
+
+Metas do GQM: **G1** saber se a atualização de versão compensa (Q1); **G2** saber o preço do free-threading em código de uma thread (Q2); **G3** saber o ganho do free-threading com paralelismo (Q3); **G4** saber o custo de memória (Q4).
+
+### 2.3 Hipóteses (H₀/H₁) e direção dos testes
+
+Nível de significância de 0,05, com correção de Holm sobre a família de testes (Q1 a Q3).
+
+| Questão | H₀ | H₁ | Teste e direção |
 |---|---|---|---|
-| Q1 · Cada versão nova é mais rápida em código de uma thread? | tempo por benchmark (pyperformance); speedup | o tempo não muda entre versões | o tempo muda entre versões |
-| Q2 · Quanto custa tirar a GIL em código de uma thread? | razão de tempo free-threaded ÷ padrão | o tempo é igual com e sem GIL | o tempo é diferente sem GIL |
-| Q3 · Sem GIL, mais threads deixam o código mais rápido? | speedup com 1, 2 e 4 threads | não há interação compilação × threads | há interação compilação × threads |
-| Q4 · Quanto de memória a mais o free-threaded usa? | pico de RSS | (descritiva) | (descritiva) |
+| Q1 | o tempo dos benchmarks é o mesmo nas duas versões (média geométrica do speedup = 1) | o tempo muda entre as versões | Wilcoxon pareado por benchmark, **bilateral**; três pares: 3.14 × 3.13, 3.15 × 3.14 e 3.15 × 3.13 |
+| Q2 | o tempo é igual com e sem GIL (razão = 1) | o tempo é diferente sem GIL (razão ≠ 1) | Wilcoxon pareado por benchmark, **bilateral**; um teste por versão |
+| Q3 | não há interação compilação × threads: mudar o nº de threads tem o mesmo efeito com e sem GIL | há interação compilação × threads | ANOVA fatorial sobre log(tempo), com bloco como fator, uma por carga; o teste F é **não direcional** por natureza |
+| Q4 | (descritiva) | (descritiva) | sem teste: reportamos a razão de RSS e a comparamos com o limite de 20 % usado nos critérios da PEP 779 |
 
-_Objetivo GQM no template de Basili, entidades, atributos e escalas: a preencher (#3)._
+**Por que bilateral (Q1 e Q2).** (i) As hipóteses unilaterais seguiriam os anúncios ("mais rápido", "mais lento sem GIL"),
+mas o estudo existe justamente para conferir os anúncios; um teste unilateral não consegue detectar o resultado
+contrário (uma regressão de desempenho numa versão nova, ou um benchmark que ganha sem GIL). (ii) O teste
+bilateral é o mais conservador, e é o implementado em `src/analise.py` (`alternative="two-sided"`). (iii) A direção
+não se perde: ela é lida do sinal da diferença, do IC 95 % da razão e do número de benchmarks que melhoram ou pioram. Para
+Q3, a pergunta é sobre interação, e interação não tem direção no teste F; o sentido (ganho só sem GIL) é lido nos
+speedups. Na Q3, a carga `hash_controle` (o `hashlib` libera a GIL) serve de controle: esperamos **não** rejeitar H₀ nela.
 
+Regra de replicação (definida antes da replicação, em `bench/DESENHO.md`): "conclusão mantida" = mesmo lado do IC 95 % em relação a 1 (Q1, Q2) e mesma decisão com limiar de 1,2× (Q3).
+
+### 2.4 Variáveis
+
+| Tipo | Variável | Níveis / medida |
+|---|---|---|
+| Independente | Versão do CPython | 3.13.18, 3.14.10, 3.15.2 |
+| Independente | Compilação | padrão (com GIL) · free-threaded (sem GIL) |
+| Independente | Número de threads (cargas com threads) | 1, 2, 4 |
+| Independente | Carga | 20 benchmarks do `pyperformance` (1 thread); `cpu_puro`, `json`, `json_compartilhado` e `hash_controle` (várias threads) |
+| Dependente | Tempo de execução | s |
+| Dependente | Speedup (e eficiência de escalonamento) | razão de tempos (e speedup ÷ n) |
+| Dependente | Pico de RSS | MiB |
+| Controlada | Máquina | cada runner (bloco) mede os 6 interpretadores; a comparação é sempre pareada dentro do bloco |
+| Controlada | Cargas e trabalho total | mesmas cargas e mesmo trabalho em todos os interpretadores (conferido por `checksum`) |
+| Controlada | Versões do `pyperformance`/`pyperf`, do `uv` e dos interpretadores | fixadas (1.14.0; `uv` 0.13.9; versões esperadas conferidas na validação) |
+| Controlada | Ordem de execução | sorteada em cada bloco, com semente fixa (`SEMENTE_BASE` + nº do bloco) |
+| Não controlada | Hardware dos runners (CPU, vizinhos) | absorvida pelo fator bloco; vira ameaça à validade (seção 6) |
+
+### 2.5 Entidade, atributo, tipo de medida e escala
+
+| Métrica | Entidade | Atributo | Medida | Escala | Estatísticas permitidas |
+|---|---|---|---|---|---|
+| M1 tempo por benchmark | produto (o interpretador em execução) | externo (desempenho, depende do ambiente) | direta | razão | média, mediana, razão, média geométrica |
+| M2 speedup entre versões | produto | externo | derivada (razão de M1) | razão | média geométrica, IC por bootstrap; **não** média aritmética de razões |
+| M3 overhead do free-threaded | produto | externo | derivada (razão de M1; overhead % = razão − 1) | razão | média geométrica, IC por bootstrap |
+| M4 tempo com n threads | produto | externo | direta (`time.perf_counter`, da largada em barreira ao fim da última thread) | razão | média, mediana, razão |
+| M5 speedup e eficiência | produto | externo | derivada (M4 com 1 thread ÷ M4 com n; eficiência = speedup ÷ n) | razão (eficiência ideal = 1) | média geométrica |
+| M6 pico de RSS | produto (processo) e recurso (memória) | externo | direta (`ru_maxrss`) | razão | média, mediana, razão |
+
+A versão do interpretador é de escala **ordinal** e o nº de threads, de **razão** tratado como fator. A média geométrica é a estatística
+adequada para razões: a média aritmética de speedups é enviesada (um 2× e um 0,5× "dão" 1,25× em vez de 1×).
+
+### 2.6 Armadilhas de medição (Goodhart, Campbell, McNamara)
+
+| Armadilha | Como aparece neste estudo | O que fazemos |
+|---|---|---|
+| **Lei de Goodhart** ("quando uma medida vira meta, deixa de ser boa medida") | O `pyperformance` é a suíte que a equipe do Faster CPython usa para guiar e anunciar otimizações; a média geométrica virou o "número de manchete". Ganhos nela podem não valer para o seu código. | Não usar a média geométrica sozinha: mostrar a distribuição por benchmark (G1), o IC 95 % e quantos benchmarks melhoram; incluir cargas próprias fora da suíte. |
+| **Lei de Campbell** (um indicador usado para decidir é pressionado e se corrompe) | Um benchmark pode ser ajustado para o que se mede. | Suíte oficial com versão fixada; cargas próprias com propósito declarado e `hash_controle` como controle do instrumento. |
+| **Falácia de McNamara** (medir só o que é fácil medir) | Medimos tempo e RSS; ficam de fora compatibilidade com bibliotecas, estabilidade e custo de migração. Usar só Python puro exclui o código com extensões em C, que é a maior parte dos projetos reais. | Declarar que as conclusões são sobre desempenho em Python puro, nestes runners; não afirmar "vale a pena migrar" em geral. |
+| Seleção de benchmarks | Os 20 benchmarks foram escolhidos por critério (Python puro, sem extensão de terceiros), e quem otimiza o interpretador também escolhe os que importam. | Critério de inclusão explícito em `bench/config.py`; exclusões registradas com motivo. |
 ## 3. Desenho em uma frase
 
 Experimento controlado, fatorial e em blocos: **6 interpretadores** (3.13, 3.14 e 3.15, cada um com e sem
