@@ -89,6 +89,12 @@ versão só como efeito principal, então não consegue dizer "o ganho com threa
 A ANOVA exploratória acrescenta esse termo. Apresentamos o resultado como um achado a confirmar, não como
 hipótese testada. Saber distinguir confirmatório de exploratório é ponto forte na defesa, não fraqueza.
 
+**Como vocês sabem que o resultado não foi sorte daquele horário ou daquelas máquinas?**
+Repetimos a coleta completa em outro horário (replicação, #13), com o mesmo desenho. O README continua
+analisando a coleta principal e mostra, na seção "Replicação", os números das duas lado a lado com
+"conclusão mantida?" em cada linha. A regra do que conta como "mantida" foi escrita **antes** da
+replicação rodar (`bench/DESENHO.md`), para não ser ajustada ao resultado.
+
 ## 4. Resultados e como interpretá-los
 
 Execução analisada: `20261120-2001_completo_44807518024` (10 blocos, validação ok, tag

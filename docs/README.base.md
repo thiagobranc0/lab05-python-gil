@@ -72,6 +72,10 @@ vários runners em paralelo dão as réplicas. Detalhes em [`bench/DESENHO.md`](
 
 {{ESTABILIDADE}}
 
+### Replicação
+
+{{REPLICACAO}}
+
 ## 6. Ameaças à validade
 
 _A preencher (#17)._

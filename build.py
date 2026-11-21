@@ -1,7 +1,8 @@
 """Gera o README.md (o documento/dashboard do estudo) a partir de docs/README.base.md e dos dados.
 
 Uso: python build.py [--execucao <id>]
-Sem --execucao, usa a última execução válida (preferindo completo > piloto > teste).
+Sem --execucao, usa a execução principal (bench/config.py: EXECUCAO_PRINCIPAL); se ela não existir, a última
+execução válida (completo > piloto > teste). Coletas completas posteriores entram na seção "Replicação".
 O texto fixo fica em docs/README.base.md; os trechos {{...}} são preenchidos aqui com tabelas e gráficos.
 Roda automaticamente no workflow depois de cada coleta validada.
 """
@@ -139,6 +140,71 @@ def sec_estabilidade(r: analise.Resultado) -> str:
     return f"![G4](images/{img})"
 
 
+LIMIAR_Q3 = 1.2  # Q3: sem GIL "ganha" se o speedup com tmax threads for ≥ 1,2× o da compilação padrão
+
+
+def _lado_ic(lo: float, hi: float) -> str:
+    return "acima de 1" if lo > 1 else ("abaixo de 1" if hi < 1 else "inclui 1")
+
+
+def _veredito_q3(ft: float, padrao: float) -> str:
+    razao = ft / padrao
+    return "sem GIL ganha" if razao >= LIMIAR_Q3 else ("com GIL ganha" if razao <= 1 / LIMIAR_Q3 else "empate")
+
+
+def sec_replicacao(principal: str | None, r: analise.Resultado | None) -> str:
+    """Compara as conclusões da execução principal com as de cada replicação (#13)."""
+    reps = analise.replicacoes(principal)
+    if r is None or not reps:
+        return "_Aguardando a replicação (#13): uma coleta completa em outro horário, comparada aqui com a principal._"
+    outras = [(e, analise.analisar(analise.carregar(e))) for e in reps]
+    cab_rep = [f"Replicação {i}" for i in range(1, len(outras) + 1)]
+    sim = lambda vs: "sem dados" if "–" in vs else ("✅ sim" if len(set(vs)) == 1 else "❌ não")
+
+    q1 = []
+    for _, x in r.q1_resumo.iterrows():
+        vals, lados = [x], [_lado_ic(x["ic_lo"], x["ic_hi"])]
+        for _, ro in outras:
+            y = ro.q1_resumo.set_index("comparacao").loc[x["comparacao"]]
+            vals.append(y); lados.append(_lado_ic(y["ic_lo"], y["ic_hi"]))
+        q1.append([x["comparacao"]] + [num(v["speedup_gmean"], 3) + "×" for v in vals] + [lados[0], sim(lados)])
+
+    q2 = []
+    for _, x in r.q2_resumo.iterrows():
+        vals, lados = [x], [_lado_ic(x["ic_lo"], x["ic_hi"])]
+        for _, ro in outras:
+            y = ro.q2_resumo.set_index("versao").loc[x["versao"]]
+            vals.append(y); lados.append(_lado_ic(y["ic_lo"], y["ic_hi"]))
+        q2.append([f"{x['versao']}t ÷ {x['versao']}"] + [num((v["razao_gmean"] - 1) * 100, 1, " %") for v in vals]
+                  + [lados[0], sim(lados)])
+
+    def q3_tab(res: analise.Resultado) -> pd.DataFrame:
+        tmax = res.q3["threads"].max()
+        return res.q3[res.q3["threads"] == tmax].pivot_table(index=["carga", "versao"], columns="compilacao",
+                                                              values="speedup")
+    base = q3_tab(r)
+    tabs = [q3_tab(ro) for _, ro in outras]
+    q3 = []
+    for (c, v), x in base.iterrows():
+        vals = [x] + [t.loc[(c, v)] if (c, v) in t.index else None for t in tabs]
+        veredits = [_veredito_q3(y["free-threaded"], y["padrao"]) if y is not None else "–" for y in vals]
+        q3.append([graficos.NOME_CARGA.get(c, c), v]
+                  + [num(y["free-threaded"], 2) + "×" if y is not None else "–" for y in vals]
+                  + [veredits[0], sim(veredits)])
+
+    lista = "; ".join(f"replicação {i} = `{e}`" for i, (e, _) in enumerate(outras, 1))
+    return (f"Principal = `{principal}`; {lista}. A replicação repete o mesmo desenho em outro horário (outros "
+            "runners). **A conclusão se mantém** quando a decisão é a mesma na principal e em cada replicação: no Q1 e no Q2, o lado do "
+            f"IC 95 % em relação a 1; no Q3, se sem GIL o speedup com 4 threads é ≥ {num(LIMIAR_Q3, 1)}× o da "
+            "compilação padrão (\"sem GIL ganha\"), ≤ o inverso (\"com GIL ganha\") ou fica entre os dois (\"empate\").\n\n"
+            + "**Q1 · speedup sobre a 3.13**\n\n"
+            + tabela(q1, ["Comparação", "Principal"] + cab_rep + ["IC 95 % (principal)", "Conclusão mantida?"])
+            + "\n\n**Q2 · custo sem GIL (uma thread)**\n\n"
+            + tabela(q2, ["Comparação", "Principal"] + cab_rep + ["IC 95 % (principal)", "Conclusão mantida?"])
+            + "\n\n**Q3 · speedup sem GIL com 4 threads**\n\n"
+            + tabela(q3, ["Carga", "Versão", "Principal"] + cab_rep + ["Decisão (principal)", "Conclusão mantida?"]))
+
+
 def sec_historico() -> str:
     indice = RAIZ / "data" / "execucoes.csv"
     if not indice.exists():
@@ -158,6 +224,7 @@ def main() -> None:
     IMAGENS.mkdir(exist_ok=True)
     execucao = a.execucao or analise.escolher_execucao()
     secoes = {k: AGUARDANDO for k in ("EXECUCAO", "Q1", "Q2", "Q3", "Q4", "TESTES", "ESTABILIDADE")}
+    r = None
     if execucao:
         d = analise.carregar(execucao)
         r = analise.analisar(d)
@@ -166,6 +233,7 @@ def main() -> None:
         if d.modo != "completo":
             secoes["EXECUCAO"] = (f"> ⚠️ Resultados da execução **{d.modo}**: servem para testar o pipeline e "
                                   "calibrar o desenho, não como resultado do estudo.\n\n" + secoes["EXECUCAO"])
+    secoes["REPLICACAO"] = sec_replicacao(execucao, r)
     secoes["HISTORICO"] = sec_historico()
 
     texto = (RAIZ / "docs" / "README.base.md").read_text(encoding="utf-8")

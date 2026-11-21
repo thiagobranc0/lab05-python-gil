@@ -34,6 +34,11 @@ EXCLUIDOS: dict[str, str] = {}  # nome -> motivo (preenchido a partir do relató
 CARGAS_MT = ["cpu_puro", "json", "json_compartilhado", "hash_controle"]
 THREADS = [1, 2, 4]
 
+# Execução principal do estudo: é a que o README analisa. Coletas completas válidas posteriores são
+# REPLICAÇÕES (#13): aparecem na seção "Replicação", comparadas com esta, sem substituí-la.
+# Vazio = usa a última execução válida (completo > piloto > teste).
+EXECUCAO_PRINCIPAL = "20261120-2001_completo_44807518024"
+
 # Semente: a ordem dos tratamentos dentro de cada bloco é sorteada com SEMENTE_BASE + nº do bloco.
 SEMENTE_BASE = 20261120
 

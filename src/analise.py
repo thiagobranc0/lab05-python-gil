@@ -36,18 +36,33 @@ N_BOOT = 5000
 
 
 # ----------------------------------------------------------------------------- dados
-def escolher_execucao() -> str | None:
-    """Última execução válida, preferindo o modo completo; depois piloto; depois teste."""
+def execucoes_validas() -> pd.DataFrame:
     indice = RAIZ / "data" / "execucoes.csv"
     if not indice.exists():
-        return None
+        return pd.DataFrame(columns=["execucao", "modo", "status", "validado_utc"])
     ex = pd.read_csv(indice)
-    ex = ex[ex["status"] == "ok"]
+    return ex[ex["status"] == "ok"].sort_values("validado_utc")
+
+
+def escolher_execucao() -> str | None:
+    """A execução principal (config.EXECUCAO_PRINCIPAL), se válida; senão a última válida (completo > piloto > teste)."""
+    ex = execucoes_validas()
+    if config.EXECUCAO_PRINCIPAL and config.EXECUCAO_PRINCIPAL in set(ex["execucao"]):
+        return config.EXECUCAO_PRINCIPAL
     for modo in ("completo", "piloto", "teste"):
         candidatas = ex[ex["modo"] == modo].sort_values("validado_utc")
         if len(candidatas):
             return candidatas["execucao"].iloc[-1]
     return None
+
+
+def replicacoes(principal: str | None) -> list[str]:
+    """Coletas completas válidas, diferentes da principal e posteriores a ela: as replicações (#13)."""
+    ex = execucoes_validas()
+    if principal is None or principal not in set(ex["execucao"]):
+        return []
+    depois = ex["validado_utc"] > ex.loc[ex["execucao"] == principal, "validado_utc"].iloc[0]
+    return ex[(ex["modo"] == "completo") & depois]["execucao"].tolist()
 
 
 @dataclass
