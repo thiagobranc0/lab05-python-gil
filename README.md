@@ -189,6 +189,10 @@ ANOVA fatorial sobre log(tempo), uma por carga (modelo planejado: compilação �
 
 ![G4](images/g4_variabilidade.png)
 
+### Replicação
+
+_Aguardando a replicação (#13): uma coleta completa em outro horário, comparada aqui com a principal._
+
 ## 6. Ameaças à validade
 
 _A preencher (#17)._
