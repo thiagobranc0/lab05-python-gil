@@ -52,17 +52,50 @@ vários runners em paralelo dão as réplicas. Detalhes em [`bench/DESENHO.md`](
 
 {{Q1}}
 
+**Interpretação.** Rejeitamos H₀: em código de uma thread, as versões novas são mais rápidas que a 3.13. A 3.14
+é 1,163× mais rápida (IC 95 % 1,107 – 1,227; 21 de 22 benchmarks) e a 3.15, 1,201× (IC 1,146 – 1,264; 22 de 22),
+com efeito quase máximo (rank-biserial −0,99 e −1,00; p Holm < 0,001). Da 3.14 para a 3.15 o ganho é menor, mas
+consistente (p Holm = 0,003; rank-biserial −0,75). O ganho não é uniforme: vai de quase zero (`pidigits`, que passa
+o tempo em aritmética de inteiros grandes, em C) a cerca de 50 % (`deepcopy`, `go`); por isso a média geométrica
+vem sempre acompanhada da distribuição no G1.
+
 ### Q2 · Quanto custa tirar a GIL? (uma thread)
 
 {{Q2}}
+
+**Interpretação.** Rejeitamos H₀ nas três versões: sem GIL, o código de uma thread fica mais lento (p Holm < 0,001;
+rank-biserial 0,89 a 0,99). O custo caiu de 33,4 % na 3.13t para 10,5 % na 3.14t e 11,4 % na 3.15t. Os ICs da
+3.14t e da 3.15t se sobrepõem, então não dá para dizer que a 3.15t piorou em relação à 3.14t. A queda coincide com a
+3.14, versão em que o free-threading passou a ser suportado oficialmente (PEP 779).
 
 ### Q3 · Sem GIL, mais threads = mais rápido?
 
 {{Q3}}
 
+**Interpretação.** Rejeitamos H₀ nas três cargas em Python: o efeito de ter mais threads depende da compilação
+(interação compilação × threads com p Holm < 0,001 e η² parcial de 0,45 a 0,98). Com GIL, 4 threads não ajudam
+(0,97× a 0,99×); sem GIL, dão cerca de 2× na CPU em Python puro e no JSON com cópia por thread, nestes runners de
+2 núcleos físicos com hyperthreading. O controle `hashlib`, que já libera a GIL, escala 3,7× nas duas compilações e
+não tem interação (p Holm = 0,710): o instrumento mede o efeito da GIL, e não outra diferença entre as compilações.
+Exploratório: com objeto compartilhado, a 3.13t e a 3.14t escalam (1,83× e 1,90× com 4 threads), mas a 3.15t não
+(0,96×). É um achado a confirmar, não uma hipótese testada.
+
+**Pressupostos da ANOVA.** Os resíduos têm caudas pesadas e variância desigual entre as células (curtose de 17 a 34
+nas cargas `cpu_puro`, `json` e `hash_controle`; teste de Levene com p < 0,05 nas quatro cargas), e as 10 repetições
+de um mesmo bloco não são independentes entre si. Por isso refizemos o modelo planejado sobre a mediana de cada
+célula (bloco × versão × compilação × threads; n = 180 por carga): as decisões sobre a interação compilação × threads
+não mudam (p < 0,001 nas três cargas em Python; p = 0,93 no controle). Na interação tripla exploratória, só o
+`json_compartilhado` continua forte (η² parcial 0,96); no `cpu_puro` ela deixa de ser significativa (p = 0,11) e no
+`json` fica fraca (p = 0,01). Ou seja, a única diferença entre versões que resiste à checagem é a regressão da
+3.15t com objeto compartilhado.
+
 ### Q4 · Memória
 
 {{Q4}}
+
+**Interpretação.** Sem GIL, o pico de memória do processo é 4 % a 6 % maior (cerca de 1 a 2 MiB sobre ~36 MiB) e
+cresce um pouco com o número de threads. É uma medida só descritiva, em processos pequenos: não dá para projetar a
+diferença para aplicações grandes.
 
 ### Testes de hipótese
 
@@ -71,6 +104,10 @@ vários runners em paralelo dão as réplicas. Detalhes em [`bench/DESENHO.md`](
 ### Estabilidade das medições
 
 {{ESTABILIDADE}}
+
+**Interpretação.** A variação entre repetições é pequena (CV mediano de 1,6 % com uma thread e de 1,0 % com threads,
+segundo a validação automática), muito menor que os efeitos medidos, de 10 % ou mais. Os runners caíram em 3 modelos
+de CPU, mas cada runner mede os 6 interpretadores: essa diferença fica no fator bloco e não enviesa as comparações.
 
 ### Replicação
 
